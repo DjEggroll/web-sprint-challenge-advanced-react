@@ -1,14 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 // Suggested initial states
 const initialMessage = ''
 const initialEmail = ''
 const initialSteps = 0
 const initialIndex = 4 // the index the "B" is at
+const initialCoordinates = '(2, 2)'
 
 export default function AppFunctional(props) {
   // THE FOLLOWING HELPERS ARE JUST RECOMMENDATIONS.
   // You can delete them and build your own logic from scratch.
+  const [coordinates, setCoordinates] = useState(initialCoordinates);
+  const [steps, setSteps] = useState(initialSteps);
+  const [index, setIndex] = useState(initialIndex);
+  const [message, setMessage] = useState(initialMessage);
+  const [email, setEmail] = useState(initialEmail);
 
   function getXY() {
     // It it not necessary to have a state to track the coordinates.
@@ -47,8 +53,8 @@ export default function AppFunctional(props) {
   return (
     <div id="wrapper" className={props.className}>
       <div className="info">
-        <h3 id="coordinates">Coordinates (2, 2)</h3>
-        <h3 id="steps">You moved 0 times</h3>
+        <h3 id="coordinates">Coordinates {coordinates}</h3>
+        <h3 id="steps">You moved {steps} times</h3>
       </div>
       <div id="grid">
         {
