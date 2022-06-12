@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import axios from 'axios';
 
 // Suggested initial states
 const initialMessage = ''
@@ -156,6 +157,38 @@ export default class AppClass extends React.Component {
   onSubmit = (evt) => {
     // Use a POST request to send a payload to the server.
     evt.preventDefault();
+    this.setState({...this.state, email: initialEmail}); //This line makes the if statements not work correctly when checking this.state.email
+    
+    const newPost = {
+      x: this.state.coordinates.x,
+      y: this.state.coordinates.y,
+      steps: this.state.steps,
+      email: this.state.email
+    }
+    
+    
+    axios.post('http://localhost:9000/api/result', newPost)
+    .then(res => {
+      this.setState({...this.state, message: res.data.message})
+      // setMessage(res.data.message);
+    })
+    .catch(err => {
+      if(newPost.email === ''){
+        console.log(err);
+        this.setState({...this.state, message: `Ouch: email is required`})
+        // setMessage(`Ouch: email is required`);
+      } 
+      else if (newPost.email === 'foo@bar.baz'){
+        console.log(err.response.data.message);
+        this.setState({...this.state, message: err.response.data.message})
+        // setMessage(err.response.data.message);
+      }
+      else {
+        console.log(err);
+        this.setState({...this.state, message: `Ouch: email must be a valid email`})
+        // setMessage(`Ouch: email must be a valid email`)
+      }
+    }); //Using this.state.email in If statements causes an error. Need further explanation.
   }
 
   render() {
@@ -164,7 +197,7 @@ export default class AppClass extends React.Component {
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">Coordinates ({this.state.coordinates.x}, {this.state.coordinates.y})</h3>
-          <h3 id="steps">You moved {this.state.steps} times</h3>
+          <h3 id="steps">{this.state.steps === 1 ? `You moved ${this.state.steps} time` : `You moved ${this.state.steps} times`}</h3>
         </div>
         <div id="grid">
           {
@@ -185,9 +218,9 @@ export default class AppClass extends React.Component {
           <button onClick={this.move} id="down">DOWN</button>
           <button onClick={this.reset} id="reset">reset</button>
         </div>
-        <form>
+        <form onSubmit={this.onSubmit}>
           <input onChange={this.onChange} value={this.state.email} id="email" type="email" placeholder="type email" />
-          <input onSubmit={this.onSubmit} id="submit" type="submit" />
+          <input id="submit" type="submit" />
         </form>
       </div>
     )

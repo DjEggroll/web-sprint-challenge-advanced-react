@@ -126,8 +126,8 @@ export default function AppFunctional(props) {
     setEmail(initialEmail);
     // setIndex(initialIndex);
     // setSteps(initialSteps);
-
-
+    
+    
     // Use a POST request to send a payload to the server.
     const newPost = {
       x: coordinates.x,
@@ -135,7 +135,7 @@ export default function AppFunctional(props) {
       steps: steps,
       email: email
     }
-
+    
     
     axios.post('http://localhost:9000/api/result', newPost)
       .then(res => {
@@ -146,14 +146,15 @@ export default function AppFunctional(props) {
           setMessage(`Ouch: email is required`);
         } 
         else if (email === 'foo@bar.baz'){
+          console.log(err);
           setMessage(err.response.data.message);
         }
         else {
           setMessage(`Ouch: email must be a valid email`)
         }
       });
-  }
-
+    }
+    
   return (
     <div id="wrapper" className={props.className}>
       <div className="info">
